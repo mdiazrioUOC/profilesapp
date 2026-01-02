@@ -14,7 +14,7 @@
     "@aws-amplify/ui-vue": "^4.3.5",
     "@tailwindcss/postcss": "^4.1.14",
     "@tailwindcss/vite": "^4.1.14",
-    "aws-amplify": "^6.15.7",
+    "aws-amplify": "^6.15.9",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",

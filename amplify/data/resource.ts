@@ -7,11 +7,39 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  DimCliente: a
     .model({
-      content: a.string(),
+      id: a.id().required(),
+      name: a.string()
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  DimInspeccion: a.model({
+      id: a.id().required(),
+      date: a.date(),
+      id_client: a.id()
+    }).authorization((allow) => [allow.publicApiKey()]),
+
+  DimEstanteria: a.model({
+      id: a.id().required(),
+      altura: a.integer(),
+      anchura: a.integer(),
+      fondo: a.integer()
+  }).authorization((allow) => [allow.publicApiKey()]),
+
+  FactIncidencias: a.model({
+      id: a.id().required(),
+      id_estanteria: a.id(),
+      nivel: a.enum(["ROJO", "AMARILLO", "VERDE"]),
+      medida_recomendada: a.string(),
+      id_foto: a.id()
+  }).authorization((allow) => [allow.publicApiKey()]),
+
+  FactRegistroInspeccion: a.model({
+    id: a.id().required(),
+    id_inspeccion: a.id(),
+    id_estanteria: a.id()
+  }).authorization((allow) => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,7 +47,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'identityPool',
+    defaultAuthorizationMode: 'apiKey',
   },
 });
 

@@ -32,9 +32,9 @@ export default function ListadoInspecciones({}) {
 
   const navigate = useNavigate();
 
-  function newInspection (){
+  const newInspection = () => {
     // Navigate to another page
-    navigate("/newinspection");
+    navigate("/new-inspection");
   };
   return (
     <div className="min-h-screen bg-background pb-24">

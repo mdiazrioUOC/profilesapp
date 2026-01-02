@@ -31,3 +31,6 @@ amplifyconfiguration*
 
 #venv
 .venv/*
+*.docx
+*.xlsx
+*.png

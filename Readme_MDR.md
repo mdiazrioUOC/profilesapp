@@ -5,13 +5,13 @@
 Desplegar el Backend en la nube
 
 ```bash
-npx ampx sandbox --profile admin-1
+npx ampx sandbox --profile admin
 ```
 
 Eliminar el Backend montado
 
 ```bash
-npx ampx sandbox delete --profile admin-1
+npx ampx sandbox delete --profile admin
 ```
 
 ## Frontend
