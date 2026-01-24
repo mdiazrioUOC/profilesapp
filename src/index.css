@@ -1,10 +1,12 @@
-@import "tailwindcss";
-
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
+
   :root {
     --background: 252 100% 97%;
     --foreground: 240 10% 20%;
@@ -15,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 20%;
 
-    --primary: 250 95% 63%;
+    --primary: 232 92% 25%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 252 100% 95%;
@@ -58,6 +60,9 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --color-navy: 5 21 122;
+
   }
 
   .dark {
@@ -99,3 +104,20 @@ All colors MUST be HSL.
   }
 }
 
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* PrimeReact custom overrides */
+.p-float-label:has(.p-inputwrapper-filled) label {
+  top: -0.30rem;
+}
