@@ -115,6 +115,7 @@ const estados = [
         sx={{
           alignItems: "center",
         }}
+        className="pt-6"
       >
 
         <TextField

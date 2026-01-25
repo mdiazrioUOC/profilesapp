@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import NewInspection from "./pages/NewInspection"
 import BaseLayout from "./pages/BaseLayout"
 import ListadoInspecciones2 from "./pages/ListadoInspecciones2";
-
+import ListadoEstanterias from "./pages/ListadoEstanterias";
 
 
 const signOut = () => {
@@ -22,6 +22,7 @@ export default function App() {
             <Route element={<BaseLayout user={user} signOut={signOut} />}>
               <Route path="/" element={<ListadoInspecciones2 />} />
               <Route path="/new-inspection" element={<NewInspection />} /> 
+              <Route path="/inspection/:id" element={<ListadoEstanterias />} /> 
             </Route>
           </Routes>
         </Router>

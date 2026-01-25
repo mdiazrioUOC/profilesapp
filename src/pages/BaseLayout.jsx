@@ -16,7 +16,7 @@ export default function BaseLayout({ user, signOut }) {
       {/* Contenido de la página */}
       <main className= "p-8">
         <div className="min-h-screen bg-white">
-          <div className= {goBack? "pt-16": "pt-6"}>
+          <div className= {goBack? "pt-11": "pt-6"}>
             <Header title={headerTitle} goBack={goBack} />
             <Outlet context={{ setNavLink, setHeader, setGoBack}}/>
           </div>

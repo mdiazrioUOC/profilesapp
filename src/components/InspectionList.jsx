@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -7,6 +8,16 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import DescriptionIcon from '@mui/icons-material/Description';
 
 const InspectionList = ({ inspections }) => {
+  const navigate = useNavigate();
+
+  const handleInspectionClick = (inspection) => {
+    navigate(`/inspection/${inspection.id}`,{
+        state: {
+          inspection,
+          from: "listadoInspecciones",
+        },
+      });
+  };
   const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
@@ -29,6 +40,8 @@ const InspectionList = ({ inspections }) => {
       {inspections.map((inspection) => (
         <ListItem
           key={inspection.id}
+          component="button"
+          onClick={() => handleInspectionClick(inspection)}
           className="bg-white hover:shadow-lg transition-shadow cursor-pointer mb-4 rounded-lg border border-gray-300"
           sx={{
             borderRadius: '8px',
