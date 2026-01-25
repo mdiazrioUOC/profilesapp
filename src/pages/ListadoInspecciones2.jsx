@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Navbar from '@/components/Navbar';
+import { useOutletContext } from "react-router-dom";
+
+import BadgeFilter from '@/components/BadgeFilter';
 import Filters from '@/components/Filter';
 import InspectionList from '@/components/InspectionList';
-import { useOutletContext } from "react-router-dom";
+import { Badge } from 'lucide-react';
 
 function ListadoInspecciones2() {
   const [activeTab, setActiveTab] = useState('Todas');
@@ -42,24 +43,24 @@ function ListadoInspecciones2() {
       status: 'report'
     }
   ];
-  const { setNavLink } = useOutletContext();
+  const { setNavLink, setHeader, setGoBack } = useOutletContext();
 
   useEffect(() => {
     setNavLink("/new-inspection");
-    return () => setNavLink(null);
+    setHeader("Inspecciones");
+    setGoBack(false)
+    return () => {
+      setNavLink(null)
+      setHeader(null)
+      setGoBack(null)
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header title="Inspecciones" />
-      <div className="pt-6 bg-white">
-        <Navbar onTabChange={setActiveTab} />
+    <div>
+        <BadgeFilter onTabChange={setActiveTab} />
         <Filters onFilterChange={setFilters} />
         <InspectionList inspections={inspections} />
-      </div>
-
-      {/* Bottom Navigation */}
-
     </div>
   );
 }
