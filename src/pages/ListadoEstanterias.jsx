@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { useParams,useLocation } from 'react-router-dom';
-import { useOutletContext } from "react-router-dom";
+import { useParams,useLocation, useOutletContext } from 'react-router-dom';
 import {List, 
         ListItem,
         ListItemText,

@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors:{
         'primary':'#05157a',
+        'secondary': '#E2F4FF',
         'navy':{
           900:'#05157a'
         }

@@ -6,6 +6,8 @@ import NewInspection from "./pages/NewInspection"
 import BaseLayout from "./pages/BaseLayout"
 import ListadoInspecciones2 from "./pages/ListadoInspecciones2";
 import ListadoEstanterias from "./pages/ListadoEstanterias";
+import NewShelf from "./pages/NewShelf";
+import SettingsMenu from "./pages/SettingsMenu";
 
 
 const signOut = () => {
@@ -23,6 +25,8 @@ export default function App() {
               <Route path="/" element={<ListadoInspecciones2 />} />
               <Route path="/new-inspection" element={<NewInspection />} /> 
               <Route path="/inspection/:id" element={<ListadoEstanterias />} /> 
+              <Route path="/new-shelf" element={<NewShelf />} /> 
+              <Route path="/settings" element={<SettingsMenu />} /> 
             </Route>
           </Routes>
         </Router>
