@@ -1,4 +1,4 @@
-import { Fab } from '@mui/material';
+import { Fab, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -27,9 +27,9 @@ const Navbar = ({ navLink }) => {
           </Fab>
         </div> : <div/>
         }
-        <button className="flex flex-col items-center text-gray-800">
+        <Button className="flex flex-col items-center text-gray-800" onClick={()=>navigate("/settings")}>
           <SettingsOutlinedIcon sx={{ fontSize: 32 }} />
-        </button>
+        </Button>
       </div>
     );
 }

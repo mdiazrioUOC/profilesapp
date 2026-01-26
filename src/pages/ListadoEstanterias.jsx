@@ -86,7 +86,7 @@ function ListadoEstanterias() {
                 </p>
             </Box>
             <Box sx={{ justifySelf: "end" }}>
-                <IconButton color="primary" aria-label="ajustes de la inspeccións">
+                <IconButton color="primary" aria-label="ajustes de la inspección">
                     <SettingsIcon/>
                 </IconButton>
             </Box>
