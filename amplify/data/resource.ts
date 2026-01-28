@@ -10,7 +10,11 @@ const schema = a.schema({
   DimCliente: a
     .model({
       id: a.id().required(),
-      name: a.string()
+      nombre: a.string(),
+      direccion: a.string(),
+      nif: a.string(),
+      fotos: a.boolean(),
+      perioricidad: a.integer()
     })
     .authorization((allow) => [allow.publicApiKey()]),
 
