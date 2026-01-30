@@ -1,3 +1,4 @@
+import { dateToCloudFormation } from 'aws-cdk-lib';
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 /*== STEP 1 ===============================================================
@@ -20,8 +21,14 @@ const schema = a.schema({
 
   DimInspeccion: a.model({
       id: a.id().required(),
-      date: a.date(),
-      id_client: a.id()
+      id_cliente: a.id(),
+      tecnico: a.string(),
+      nombrePlanta: a.string(),
+      direccion: a.string(),
+      provincia: a.string(),
+      numeroInforme: a.string(),
+      fecha: a.date(),
+      estado: a.string()
     }).authorization((allow) => [allow.publicApiKey()]),
 
   DimEstanteria: a.model({

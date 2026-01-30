@@ -19,7 +19,7 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
     const navigate = useNavigate();
 
     const handleChangeForm = (field) => (event, value) => {
-        console.log(event, value)
+        console.log(formData)
         setFormData((prev) => ({
         ...prev,
         [field]: event?.target ? event.target.value : value,
@@ -31,14 +31,22 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
         setLoading(true);
 
         try {
-            await saveFunction(formData);
+            // Formatear la fecha si existe (convertir dayjs a string YYYY-MM-DD)
+            const dataToSave = { ...formData };
+            if (dataToSave.fecha && typeof dataToSave.fecha === 'object' && dataToSave.fecha.format) {
+                dataToSave.fecha = dataToSave.fecha.format('YYYY-MM-DD');
+            }
+
+            console.log("Datos a guardar:", dataToSave);
+            await saveFunction(dataToSave);
             setSuccess(true);
 
             setTimeout(() => {
                 navigate(-1);
                 }, 1500);
         } catch (err) {
-            console.error("Error creando cliente:", err);
+            console.error("Error creando registro:", err);
+            console.error("Detalles del error:", err.errors || err.message);
         } finally {
             setLoading(false);
         }

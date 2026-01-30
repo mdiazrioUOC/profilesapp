@@ -1,16 +1,15 @@
 import { useState } from "react";
-
-import CustomForm from "@/components/CustomForm";
-import NewClientForm from "../components/NewClientForm";
 import client from "@/aws.js";
+import  NewClientForm  from "@/components/NewClientForm";
+import  CustomForm  from "@/components/CustomForm";
 
 function NewClient(){
     const [formData, setFormData] = useState({
-        "nombre": "",
-        "direccion": "",
-        "nif": "",
-        "fotos": true, 
-        "perioricidad": 12
+        nombre: "",
+        direccion: "",
+        nif: "",
+        fotos: true, 
+        perioricidad: 12
     });
 
     return (
