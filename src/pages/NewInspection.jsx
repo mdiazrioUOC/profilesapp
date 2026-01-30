@@ -13,7 +13,7 @@ export default function NewInspection() {
     provincia: "",
     numeroInforme: "",
     fecha: null,
-    estado: ""
+    estado: "programada"
   });
 
 

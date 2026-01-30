@@ -39,7 +39,8 @@ export default function NewInspectionForm({formData, handleChangeForm, setFormDa
     
     const estados = [
       { value: "programada", label: "Programada" },
-      { value: "realizada", label: "Realizada" },
+      { value: "pendiente", label: "Pendiente" },
+      { value: "Finalizada", label: "Finalizada" },
     ]
     
     return (

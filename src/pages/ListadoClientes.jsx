@@ -1,20 +1,25 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-
-const clientes =[
-    {id:0, nombre:"Cliente 1"}, 
-    {id:1, nombre:"Cliente 2"},
-    {id:2, nombre:"Cliente 3"},
-    {id:3, nombre:"Cliente 4"}]
+import client from "@/aws.js";
 
 import {List, 
         ListItem,
         ListItemText,
-        ListItemIcon} from '@mui/material';
+        ListItemIcon,
+        TextField,
+        InputAdornment,
+        Typography} from '@mui/material';
+
+import FormControl, { useFormControl } from '@mui/material/FormControl';
+
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useNavigate } from "react-router-dom";
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function ListadoClientes(){
+    const [clientes, setClientes] = useState([]);
+    const [clientesFiltrados, setClientesFiltrados] = useState([]);
+    const [busqueda, setBusqueda] = useState([]);
 
     const { setNavLink, setHeader, setGoBack } = useOutletContext();
     const navigate = useNavigate();
@@ -30,6 +35,22 @@ export default function ListadoClientes(){
         };
         }, []);
 
+    const selectionSet = ['id', 'nombre'];
+
+    const fetchClientes = async () => {
+        try {
+            const {data, errors} = await    client.models.DimCliente.list({selectionSet});
+            setClientes(data);
+            setClientesFiltrados(data);
+            } catch (err) {
+            console.error("Error fetching clientes:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchClientes();
+    }, []);
+
     const handleClientClick = (client) => {
         navigate(`/cliente/${client.id}`,{
             state: {
@@ -39,9 +60,64 @@ export default function ListadoClientes(){
         });
     }
 
+    const filtrarClientes =(valorBusqueda)=>{
+        const resultados = clientes.filter((cliente) =>
+            cliente.nombre
+            .toLowerCase()
+            .includes(valorBusqueda.toLowerCase())
+        );
+        setClientesFiltrados(resultados)
+        setBusqueda(valorBusqueda)
+    }
+
     return (
-        <List>
-                {clientes.map((cliente) => (
+        <>
+        <TextField
+            fullWidth
+            label="Buscar cliente"
+            variant="outlined"
+            value={busqueda}
+            onChange={(e) => filtrarClientes(e.target.value)}
+            margin="normal"
+            className="bg-white hover:shadow-lg transition-shadow cursor-pointer mb-4 rounded-lg border border-gray-300"
+            size="small"
+            slotProps={{
+                input: {
+                    endAdornment: (
+                    <InputAdornment position="end">
+                        <SearchIcon />
+                    </InputAdornment>
+                    ),
+                },
+            }}
+            sx={{
+            "& .MuiOutlinedInput-root": {
+                borderRadius: "20px",
+                "& fieldset": {
+                borderRadius: "20px",
+                },
+                "&:hover fieldset": {
+                borderRadius: "20px",
+                },
+                "&.Mui-focused fieldset": {
+                borderRadius: "20px",
+                },
+            },
+            boxShadow: "none",
+            }}
+        />
+        
+        {clientesFiltrados.length === 0 ? (
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 2 }}
+        >
+          No se encontraron clientes
+        </Typography>
+      ) : (<List>
+                {clientesFiltrados.map((cliente) => (
                     <ListItem
                     key={cliente.id}
                     component="button"
@@ -63,6 +139,7 @@ export default function ListadoClientes(){
                     </ListItemIcon>
                     </ListItem>
                 ))}
-        </List>
+        </List>)}
+    </>
     );
 }
