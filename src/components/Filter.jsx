@@ -40,7 +40,6 @@ const Filters = ({ filters, setFilters }) => {
       try {
           const {data, errors} = await    client.models.DimCliente.list({selectionSet});
           setClientes(data);
-          console.log(data)
           } catch (err) {
           console.error("Error fetching clientes:", err);
       }

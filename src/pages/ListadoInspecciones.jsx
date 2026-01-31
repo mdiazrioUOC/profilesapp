@@ -24,7 +24,7 @@ function ListadoInspecciones() {
   const updateFilters = (filters) =>{
     const resultados = inspecciones.filter((item) => {
       const { estados, clientes, provincias, fechas } = filters;
-      console.log(filters)
+
       // ESTADOS
       const pasaEstados = 
         estados.length === 0 ||
@@ -69,7 +69,6 @@ function ListadoInspecciones() {
             fecha: parseDate(item.fecha)
           }));
           setInspecciones(dataConFechas);
-          console.log(dataConFechas)
           setInspeccionesFiltradas(dataConFechas);
           } catch (err) {
           console.error("Error fetching inspecciones:", err);

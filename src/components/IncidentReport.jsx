@@ -120,7 +120,6 @@ function IncidentOpen({title, setStatus, setFormData, formData, withPosition}){
     };
 
     const handleChipChange = (level) =>{
-        console.log(level)
         if (formData.nivel === level.label){
             setFormData({...formData, nivel: ""})
         }

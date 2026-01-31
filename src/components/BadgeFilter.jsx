@@ -17,9 +17,6 @@ const BadgeFilter = ({ filters, setFilters }) => {
   };
 
   const handleChangeForm = (tab) => (event, value) => {
-      console.log(filters.estados)
-      console.log(tab)
-
       const exists = filters.estados.includes(tab);
 
       const new_filters = {...filters,

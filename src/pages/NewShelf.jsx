@@ -48,7 +48,6 @@ function NewShelf () {
     };
 
     const handleNumberChange = (field) => (value) => {
-        console.log("hey")
         setFormData((prev) => ({
             ...prev,
             [field]: value,
@@ -65,7 +64,6 @@ function NewShelf () {
                                                     'altura':0
                                                 }]
         }))
-        console.log(formData)
     }
 
     return (

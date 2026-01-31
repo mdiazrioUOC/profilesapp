@@ -19,7 +19,6 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
     const navigate = useNavigate();
 
     const handleChangeForm = (field) => (event, value) => {
-        console.log(formData)
         setFormData((prev) => ({
         ...prev,
         [field]: event?.target ? event.target.value : value,
@@ -37,7 +36,6 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
                 dataToSave.fecha = dataToSave.fecha.format('YYYY-MM-DD');
             }
 
-            console.log("Datos a guardar:", dataToSave);
             await saveFunction(dataToSave);
             setSuccess(true);
 

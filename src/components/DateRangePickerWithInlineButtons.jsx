@@ -89,7 +89,6 @@ const DateRangePickerWithInlineButtons = () => {
   };
 
   const handleApply = () => {
-    console.log("Applied:", selectedStartDate, selectedEndDate);
     setIsOpen(false);
   };
 

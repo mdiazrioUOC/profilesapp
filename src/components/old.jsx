@@ -4,7 +4,6 @@
       const cliente = await client.models.DimCliente.create({
         name: newClienteName
       });
-      console.log(cliente)
       fetchClientes()
       setClientes([...clientes, cliente.data]);
       setSelectedCliente(cliente.data.id);
