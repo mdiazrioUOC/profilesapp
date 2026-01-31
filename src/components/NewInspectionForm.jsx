@@ -8,6 +8,7 @@ import client from "@/aws.js";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import 'dayjs/locale/es';
 
 import PROVINCIAS from '@/data/provincias'
 
@@ -44,7 +45,7 @@ export default function NewInspectionForm({formData, handleChangeForm, setFormDa
     ]
     
     return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
         <TextField
           select
           label="Técnico Responsable"
@@ -68,8 +69,8 @@ export default function NewInspectionForm({formData, handleChangeForm, setFormDa
         <TextField
           select
           label="Cliente"
-          value={formData.id_cliente}
-          onChange={handleChangeForm("id_cliente")}
+          value={formData.idCliente}
+          onChange={handleChangeForm("idCliente")}
           required
           color='primary'
           className="w-full"

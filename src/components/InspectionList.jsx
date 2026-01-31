@@ -18,22 +18,23 @@ const InspectionList = ({ inspections }) => {
         },
       });
   };
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'pending':
+  const getestadoIcon = (estado) => {
+    switch (estado) {
+      case 'pendiente':
         return <RefreshIcon className="text-red-600 w-8 h-8" />;
-      case 'completed':
+      case 'realizada':
         return <CheckCircleIcon className="text-blue-900 w-8 h-8" />;
-      case 'scheduled':
+      case 'programada':
         return <EventIcon className="text-blue-900 w-8 h-8" />;
-      case 'to-schedule':
+      case 'presupuesto':
         return <EventAvailableIcon className="text-blue-900 w-8 h-8" />;
-      case 'report':
+      case 'finalizada':
         return <DescriptionIcon className="text-blue-900 w-8 h-8" />;
       default:
         return null;
     }
   };
+  const opciones = { day: "numeric", month: "short", year: "numeric" };
 
   return (
     <List className="min-h-screen bg-white">
@@ -52,22 +53,17 @@ const InspectionList = ({ inspections }) => {
           }}
         >
           <ListItemText
-            primary={inspection.clientName}
-            secondary={inspection.date}
+            primary={inspection.cliente.nombre}
+            secondary={inspection.provincia + ", " + inspection.fecha.toLocaleDateString("es-ES", opciones)}
+            className="text-navy-900"
             slotProps={{
               primary: {
-                fontWeight: 'bold',
-                color: '#051479',
-                fontSize: '1rem',
-              },
-              secondary: {
-                color: '#666',
-                fontSize: '0.875rem',
-              },
+                fontWeight: 500,
+              }
             }}
           />
           <ListItemIcon sx={{ minWidth: 'auto', ml: 2 }}>
-            {getStatusIcon(inspection.status)}
+            {getestadoIcon(inspection.estado)}
           </ListItemIcon>
         </ListItem>
       ))}

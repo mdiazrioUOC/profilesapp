@@ -7,7 +7,7 @@ export default function NewInspection() {
 
   const [formData, setFormData] = useState({
     tecnico: "",
-    id_cliente: "",
+    idCliente: "",
     nombrePlanta: "",
     direccion: "",
     provincia: "",

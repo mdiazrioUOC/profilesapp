@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 
-const BadgeFilter = ({ onTabChange }) => {
-  const [activeTab, setActiveTab] = useState('Todas');
-
+const BadgeFilter = ({ filters, setFilters }) => {
+  // const [activeTab, setActiveTab] = useState('Todas');
   const tabs = [
-    'Todas',
-    'Programadas',
+    'Programada',
     'P. Presupuesto',
+    'P. Programación',
     'Recomendadas',
     'Finalizadas'
   ];
@@ -17,6 +16,21 @@ const BadgeFilter = ({ onTabChange }) => {
     onTabChange(tab);
   };
 
+  const handleChangeForm = (tab) => (event, value) => {
+      console.log(filters.estados)
+      console.log(tab)
+
+      const exists = filters.estados.includes(tab);
+
+      const new_filters = {...filters,
+        estados: exists
+        ? filters.estados.filter((e) => e !== tab)
+        : [...filters.estados, tab],
+      }
+      
+      setFilters(new_filters);
+  };   
+
   return (
     <nav className="bg-white px-4 py-3 overflow-x-auto scrollbar-hide">
       <div className="flex gap-2 min-w-max">
@@ -25,17 +39,17 @@ const BadgeFilter = ({ onTabChange }) => {
             key={tab}
             label={tab}
             size="small"
-            onClick={() => handleTabClick(tab)}
+            onClick={handleChangeForm(tab)}
             className={`${
-              activeTab === tab
+              filters.estados.includes(tab)
                 ? 'bg-navy-900 text-white'
                 : 'bg-blue-50 text-navy-900'
-            } px-4 py-2 font-small`}
+            } px-2 py-2 font-small`}
             sx={{
-              bgcolor: activeTab === tab ? '#000080' : '#E3F2FD',
-              color: activeTab === tab ? '#fff' : '#000080',
+              bgcolor: filters.estados.includes(tab) ? '#000080' : '#E3F2FD',
+              color: filters.estados.includes(tab) ? '#fff' : '#000080',
               '&:hover': {
-                bgcolor: activeTab === tab ? '#000066' : '#BBDEFB',
+                bgcolor: filters.estados.includes(tab) ? '#000066' : '#BBDEFB',
               },
               fontSize: '0.95rem',
               fontWeight: 500,

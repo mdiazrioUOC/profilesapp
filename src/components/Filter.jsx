@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import client from "@/aws.js";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterListAltIcon from '@mui/icons-material/FilterListAlt';
@@ -25,23 +26,37 @@ addLocale('es', {
 });
         
 
-const Filters = ({ onFilterChange }) => {
+const Filters = ({ filters, setFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    status: [],
-    dateRange: ''
-  });
-
-  const [dates, setDates] = useState('');
+  const [clientes, setClientes] = useState([]);
   
   const toggleDrawer = (isOpen) => (event) => {
     setIsOpen(!isOpen)
   };
 
-  const handleApplyFilters = () => {
-    onFilterChange(filters);
-    setIsOpen(false);
+  const selectionSet = ['id', 'nombre'];
+
+  const fetchClientes = async () => {
+      try {
+          const {data, errors} = await    client.models.DimCliente.list({selectionSet});
+          setClientes(data);
+          console.log(data)
+          } catch (err) {
+          console.error("Error fetching clientes:", err);
+      }
   };
+
+  useEffect(() => {
+      fetchClientes();
+  }, []);
+
+
+  const handleChangeForm = (field) => (event, value) => {
+        const new_filters = {...filters,
+          [field]: value ? value : event.target.value
+        }
+        setFilters(new_filters);
+    };    
 
   return (
     <>
@@ -65,6 +80,7 @@ const Filters = ({ onFilterChange }) => {
               options={PROVINCIAS}
               getOptionLabel={(option) => option.nombre}
               isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={handleChangeForm("provincias")}
               renderInput={(params) => (
                 <TextField {...params} label="Provincia" />
               )}
@@ -72,17 +88,18 @@ const Filters = ({ onFilterChange }) => {
             <Autocomplete
               multiple
               id="filtro-cliente"
-              options={PROVINCIAS}
+              options={clientes}
               getOptionLabel={(option) => option.nombre}
               isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={handleChangeForm("clientes")}
               renderInput={(params) => (
                 <TextField {...params} label="Cliente" />
               )}
             />
           </Stack>
-          <div className={dates=='' ? "pt-2" : "pt-5"}>
+          <div className={filters.fechas ? "pt-5" : "pt-2"}>
           <FloatLabel className="w-full">
-              <Calendar inputId="filtro_fecha" value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection locale="es" className="w-full p-3" showButtonBar/>
+              <Calendar inputId="filtro_fecha" value={filters.fechas} onChange={handleChangeForm("fechas")} selectionMode="range" readOnlyInput hideOnRangeSelection locale="es" className="w-full p-3" showButtonBar/>
               <label htmlFor="filtro_fecha">Fecha Inicio - Fecha Fin</label>
           </FloatLabel>
           </div >

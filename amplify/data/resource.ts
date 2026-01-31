@@ -15,13 +15,15 @@ const schema = a.schema({
       direccion: a.string(),
       nif: a.string(),
       fotos: a.boolean(),
-      perioricidad: a.integer()
+      perioricidad: a.integer(),
+      inspecciones: a.hasMany("DimInspeccion", "idCliente"),
     })
     .authorization((allow) => [allow.publicApiKey()]),
 
   DimInspeccion: a.model({
       id: a.id().required(),
-      id_cliente: a.id(),
+      idCliente: a.id(),
+      cliente: a.belongsTo("DimCliente", "idCliente"),
       tecnico: a.string(),
       nombrePlanta: a.string(),
       direccion: a.string(),
