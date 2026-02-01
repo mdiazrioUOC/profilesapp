@@ -7,7 +7,20 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
 =========================================================================*/
+
 const schema = a.schema({
+  Modulo: a.customType({
+    numero: a.integer(),
+    longitud: a.integer(),
+    fondo: a.integer(),
+    altura: a.integer(),
+  }),
+
+  CamposIncidencia: a.customType({
+    descripcion: a.string(),
+    medida: a.string()
+  }),
+
   DimCliente: a
     .model({
       id: a.id().required(),
@@ -30,28 +43,41 @@ const schema = a.schema({
       provincia: a.string(),
       numeroInforme: a.string(),
       fecha: a.date(),
-      estado: a.string()
+      estado: a.string(),
+      estanterias: a.hasMany("Estanteria", "idInspeccion"),
+      incidencias: a.hasMany("Incidencia", "idInspeccion")
     }).authorization((allow) => [allow.publicApiKey()]),
 
-  DimEstanteria: a.model({
+  Estanteria: a.model({
       id: a.id().required(),
-      altura: a.integer(),
-      anchura: a.integer(),
-      fondo: a.integer()
+      idInspeccion: a.id(),
+      inspeccion: a.belongsTo("DimInspeccion", "idInspeccion"),
+      idExterno: a.string(),
+      tipo: a.string(),
+      nivelCarga: a.integer(),
+      modulos: a.ref('Modulo').array(),
+      incidencias: a.hasMany("Incidencia", "idEstanteria")
   }).authorization((allow) => [allow.publicApiKey()]),
 
-  FactIncidencias: a.model({
+  Incidencia: a.model({
       id: a.id().required(),
-      id_estanteria: a.id(),
-      nivel: a.enum(["ROJO", "AMARILLO", "VERDE"]),
-      medida_recomendada: a.string(),
-      id_foto: a.id()
+      idEstanteria: a.id(),
+      estanteria: a.belongsTo("Estanteria", "idEstanteria"),
+      idInspeccion: a.id(),
+      inspeccion: a.belongsTo("DimInspeccion", "idInspeccion"),
+      nivel: a.enum(["Rojo", "Amarillo", "Verde"]),
+      tipo: a.enum(["ESTATICA", "CARGA", "MONTAJE", "DOCUMENTAL"]),
+      predeterminada: a.string(),
+      posicion: a.string(),
+      idFotos:a.string().array(),
+      descripcion: a.string(),
+      medida:a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
 
-  FactRegistroInspeccion: a.model({
-    id: a.id().required(),
-    id_inspeccion: a.id(),
-    id_estanteria: a.id()
+  IncidenciaPredeterminada: a.model({
+    id: a.id(),
+    tipo: a.enum(["ESTATICA", "CARGA", "MONTAJE", "DOCUMENTAL"]),
+    opciones: a.ref('CamposIncidencia').array(),
   }).authorization((allow) => [allow.publicApiKey()]),
 });
 

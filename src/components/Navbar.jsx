@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ navLink }) => {
     const navigate = useNavigate();
+
     return (
     <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center py-3 px-4 border-t border-gray-200">
         <Button className="flex flex-col items-center text-gray-800" onClick={()=>navigate("/")}>
@@ -13,11 +14,16 @@ const Navbar = ({ navLink }) => {
         </Button>
         {navLink ? 
         <div className="relative">
-          <Fab 
-            color="primary" 
+          <Fab
+            color="primary"
             aria-label="add"
-            onClick={() => navigate(navLink)}
-            sx={{ 
+            onClick={() => {
+                if (!navLink) return;
+                typeof navLink === "string"
+                  ? navigate(navLink)
+                  : navigate(navLink.pathname, { state: navLink.state });
+            }}
+            sx={{
               bgcolor: '#000080',
               '&:hover': { bgcolor: '#000066' }
             }}

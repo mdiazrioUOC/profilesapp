@@ -1,186 +1,69 @@
-import * as React from 'react';
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import {Stack,
-        Box,
-        List,
-        TextField, 
-        Autocomplete,
-        Divider, 
-        IconButton} from '@mui/material';
-import NumberField from '@/components/NumberField';
-import AddIcon from '@mui/icons-material/Add';
+import {useState } from "react";
+import client from "@/aws.js";
 
-import IncidentReport from '@/components/IncidentReport';
+import CustomForm from '@/components/CustomForm';
+import NewShelfForm from '@/components/NewShelfForm';
+import {useLocation, useNavigate } from 'react-router-dom';
 
 function NewShelf () {
-    const { setNavLink, setHeader, setGoBack } = useOutletContext();
+    const { state } = useLocation();
+    const navigate = useNavigate();
+    const inspeccion = state.inspection;
+    
     const [formData, setFormData] = useState({
-        idEstanteria: "",
+        idExterno: "",
         tipo: "",
-        nivelesCarga: 0,
+        nivelCarga: 0,
         modulos:[{
             'numero':0,
             'longitud':0,
             'fondo':0,
             'altura':0
         }],
-        incidencias:[]
+        incidencias:{}
     });
 
-    const tipos = ["Paletización", "Cantilever", "Drive-in", "Push-back", "Shuttle", "Picking"]
+    const saveForm = async (dataToSave) =>{
+        const { incidencias, ...sinIncidencias } = dataToSave;
 
-    useEffect(() => {
-        setHeader("Nueva estantería");
-        setGoBack(true)
-        return () => {
-            setNavLink(null)
-            setHeader(null)
-            setGoBack(null)
-        };
-        }, []);
+        // guardar la estantería
+        const estanteria = {
+            ...sinIncidencias,
+            idInspeccion: inspeccion.id
+        }
+        console.log(estanteria)
+        const {data: estanteriaCreada, errors} = await client.models.Estanteria.create(estanteria)
 
-    const handleChange = (field) => (event, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value ?? event?.target?.value ?? "",
-        }));
-    };
+        if (errors) {
+            console.error("Error creando estantería:", errors);
+            return;
+        }
 
-    const handleNumberChange = (field) => (value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
-    const newModule = () =>{
-        setFormData((prev) => ({
-            ...prev,
-            ["modulos"] : [...prev["modulos"], {
-                                                    'numero':0,
-                                                    'longitud':0,
-                                                    'fondo':0,
-                                                    'altura':0
-                                                }]
-        }))
+        console.log(estanteriaCreada)
+        // guardar las incidencias
+        Object.entries(incidencias).forEach(([tipo, item]) => {
+            const incidencia = {
+                ...item,
+                idEstanteria: estanteriaCreada.id,
+                idInspeccion: inspeccion.id,
+                tipo: tipo.toUpperCase(), 
+            }
+            console.log(incidencia)
+            client.models.Incidencia.create(incidencia)
+        })        
     }
 
+    //idInspeccion, 
     return (
-        <div className="pt-4">
-            <Stack gap={2}>
-                <TextField
-                    label="ID de la estantería"
-                    value={formData.idEstanteria}
-                    onChange={handleChange("idEstanteria")}
-                    required
-                    color='primary'
-                    className="w-full"
-                    sx = {{ 
-                        boxShadow: 1,
-                        borderColor: 'primary.main'
-                    }}
-                />
-
-            <Autocomplete
-                options={tipos}
-                inputValue={formData.tipo}
-                onInputChange={handleChange("tipo")}
-                renderInput={(params) => (
-                    <TextField {...params} label="Tipo Estantería" />
-                )}
-                color='primary'
-                className="w-full"
-                sx = {{ 
-                    boxShadow: 1,
-                    borderColor: 'primary.main'
-                }}
-            />
-            <NumberField
-                label="Niveles de carga"
-                value={formData.nivelesCarga}
-                onValueChange={handleNumberChange("nivelesCarga")}
-            />
-            <div>
-                <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-                    <Divider textAlign="left" sx={{ flexGrow: 1 }}>Módulos</Divider>
-                    <IconButton 
-                        color="primary" 
-                        aria-label="añadir módulo" 
-                        onClick = {() => newModule()}>
-                        <AddIcon/>
-                    </IconButton>
-                </Box>
-                <Stack gap={1}>
-                {formData.modulos.map((modulo, index) => (
-                        <Stack key={index} direction="row" gap={1}>
-                            <NumberField
-                                label="Módulos"
-                                value={modulo.numero}
-                                other = {{min:0}}
-                                onValueChange={(value) => {
-                                    const newModulos = [...formData.modulos];
-                                    newModulos[index].numero = value;
-                                    setFormData(prev => ({ ...prev, modulos: newModulos }));
-                                }}
-                                showButtons={false}
-                                showLabels = {index==0}
-                                sx={{ flex: 1 }}
-                            />
-                            <NumberField
-                                label="Longitud"
-                                value={modulo.longitud}
-                                unit="m"
-                                onValueChange={(value) => {
-                                    const newModulos = [...formData.modulos];
-                                    newModulos[index].longitud = value;
-                                    setFormData(prev => ({ ...prev, modulos: newModulos }));
-                                }}
-                                showButtons={false}
-                                showLabels = {index==0}
-                                className="flex-1"
-                            />
-                            <NumberField
-                                label="Fondo"
-                                value={modulo.fondo}
-                                unit="m"
-                                onValueChange={(value) => {
-                                    const newModulos = [...formData.modulos];
-                                    newModulos[index].fondo = value;
-                                    setFormData(prev => ({ ...prev, modulos: newModulos }));
-                                }}
-                                showButtons={false}
-                                showLabels = {index==0}
-                                className="flex-1"
-                            />
-                            <NumberField
-                                label="Altura"
-                                value={modulo.altura}
-                                unit="m"
-                                onValueChange={(value) => {
-                                    const newModulos = [...formData.modulos];
-                                    newModulos[index].altura = value;
-                                    setFormData(prev => ({ ...prev, modulos: newModulos }));
-                                }}
-                                showButtons={false}
-                                showLabels = {index==0}
-                                sx={{ flex: 1 }}
-                            />
-                        </Stack>
-                ))}
-                </Stack>
-            </div>
-            <div>
-                <Divider textAlign="left">Incidencias</Divider>
-                <List>
-                    <IncidentReport title={"Ins. Estática"} withPosition={true}/>
-                    <IncidentReport title={"Ins. Estado de la Carga"} withPosition={false}/>
-                    <IncidentReport title={"Ins. de Montaje"} withPosition={false}/>
-                    <IncidentReport title={"Ins. Documental"} withPosition={false}/>
-                </List>
-            </div>
-        </Stack>
-        </div>
+        <CustomForm 
+            titulo="Nueva Estantería" 
+            saveFunction={saveForm}
+            formData = {formData}
+            setFormData = {setFormData}  > 
+            <NewShelfForm 
+                formData = {formData}
+                setFormData = {setFormData}/>
+        </CustomForm>  
     );
 }
 

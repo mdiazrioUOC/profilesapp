@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams,useLocation, useOutletContext } from 'react-router-dom';
-import {List, 
+import {List,
         ListItem,
         ListItemText,
         ListItemIcon,
@@ -27,14 +27,27 @@ const equiposAlmacenajeMock = [
 function ListadoEstanterias() {
     const { id } = useParams();
     const { state } = useLocation();
+    const navigate = useNavigate();
+
+    // Validate state exists
+    if (!state || !state.inspection) {
+        console.error("No inspection data provided");
+        navigate(-1);
+        return null;
+    }
+
     const inspection = state.inspection;
 
     const { setNavLink, setHeader, setGoBack } = useOutletContext();
-  
-    const navigate = useNavigate();
 
     useEffect(() => {
-        setNavLink("/new-shelf");
+        setNavLink({
+            pathname: `/new-shelf`,
+            state: {
+                inspection,
+                from: "listadoEstanterias",
+            },
+        });
         setHeader("Estanterías");
         setGoBack(true)
         return () => {
