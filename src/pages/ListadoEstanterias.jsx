@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams,useLocation, useOutletContext } from 'react-router-dom';
 import {List,
         ListItem,
@@ -10,6 +10,8 @@ import { Box } from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { useNavigate } from 'react-router-dom';
+
+import client from "@/aws.js";
 
 const equiposAlmacenajeMock = [
   { id: 0, nombre: "Equipo almacenaje 1", status: 'pending' },
@@ -37,7 +39,13 @@ function ListadoEstanterias() {
     }
 
     const inspection = state.inspection;
-
+    const [inspectionData, setInspectionData] = useState({
+        cliente:{
+            nombre:""
+        },
+        fecha: "",
+        estanterias:[]
+    });
     const { setNavLink, setHeader, setGoBack } = useOutletContext();
 
     useEffect(() => {
@@ -56,6 +64,22 @@ function ListadoEstanterias() {
           setGoBack(null)
         };
       }, []);
+    
+    const selectionSet = ["estanterias.*", "cliente.nombre", "fecha"]
+    const fetchEstanterias = async () => {
+        try {
+            const {data, errors} = await client.models.DimInspeccion.get(
+                {id: inspection.id},{selectionSet});
+            console.log(data)
+            setInspectionData(data);
+            } catch (err) {
+            console.error("Error fetching estanterías:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchEstanterias();
+    }, []);
 
     const getStatusIcon = (status) => {
         switch (status) {
@@ -90,12 +114,12 @@ function ListadoEstanterias() {
         >
             <Box sx={{ justifySelf: "start" }}>
                 <p className="text-navy-900">
-                    {inspection.date}
+                    {inspectionData.fecha}
                 </p>
             </Box>
             <Box sx={{ justifySelf: "center" }}>
                 <p className="font-roboto font-medium text-xl text-center text-navy-900">
-                    {inspection.clientName}
+                    {inspectionData.cliente.nombre}
                 </p>
             </Box>
             <Box sx={{ justifySelf: "end" }}>
@@ -105,7 +129,7 @@ function ListadoEstanterias() {
             </Box>
         </Box>
         <List>
-        {equiposAlmacenajeMock.map((estanteria) => (
+        {inspectionData.estanterias.map((estanteria) => (
             <ListItem
             key={estanteria.id}
             component="button"
@@ -120,10 +144,10 @@ function ListadoEstanterias() {
             }}
             >
             <ListItemText
-                primary={estanteria.nombre}
+                primary={estanteria.idExterno}
             />
             <ListItemIcon sx={{ minWidth: 'auto', ml: 2 }}>
-                {getStatusIcon(estanteria.status)}
+                {getStatusIcon('pending')}
             </ListItemIcon>
             </ListItem>
         ))}
