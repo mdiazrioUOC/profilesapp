@@ -27,11 +27,10 @@ const emptyIncident = {
         'idFotos':[],
         'descripcion': "",
         'medida': "",
-        
     }
 
 const isEmpty = (incident) => (
-    incident.nivel === "" && incident.descripcion == "" && incident.medida == "");
+    incident.nivel === "" && incident.descripcion == "" && incident.medida == "" && incident.idFotos.length==0);
 
 const isIncomplete = (incident) =>(
     (incident.nivel !=="" && ((incident.descripcion !== "" && incident.medida !== "")))
@@ -123,6 +122,7 @@ function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPo
         {color: "error", label:"Rojo"}]
 
     const handleChange = (field) => (event, value) => {
+        console.log(field, event, value )
         const newIncidentData = {...incidentData, 
             [field]: value ?? event?.target?.value ?? "",
         }
@@ -228,7 +228,10 @@ function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPo
                         borderColor: 'primary.main'
                     }}
                 />)}
-                <UploadPhotoButton/>
+                <UploadPhotoButton
+                    uploadedPhotos={incidentData.idFotos}
+                    setPhotos={handleChange("idFotos")}
+                />
                 <Button variant="text" color="gray"  aria-label="comment" startIcon={<ChangeCircleOutlinedIcon />} onClick={()=> setIsManual(!isManual)}>
                 {!isManual ? "Incidencia manual" : "Incidencia predefinida"}
                 </Button>
