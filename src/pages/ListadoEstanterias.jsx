@@ -13,19 +13,6 @@ import { useNavigate } from 'react-router-dom';
 
 import client from "@/aws.js";
 
-const equiposAlmacenajeMock = [
-  { id: 0, nombre: "Equipo almacenaje 1", status: 'pending' },
-  { id: 1, nombre: "Equipo almacenaje 2", status: 'reviewed' },
-  { id: 2, nombre: "Equipo almacenaje 3", status: 'pending' },
-  { id: 3, nombre: "Equipo almacenaje 4", status: 'pending' },
-  { id: 4, nombre: "Equipo almacenaje 5", status: 'pending' },
-  { id: 5, nombre: "Equipo almacenaje 6", status: 'reviewed' },
-  { id: 6, nombre: "Equipo almacenaje 7", status: 'reviewed' },
-  { id: 7, nombre: "Equipo almacenaje 8", status: 'reviewed' },
-  { id: 8, nombre: "Equipo almacenaje 9", status: 'pending' },
-  { id: 9, nombre: "Equipo almacenaje 10", status: 'pending' },
-];
-
 function ListadoEstanterias() {
     const { id } = useParams();
     const { state } = useLocation();

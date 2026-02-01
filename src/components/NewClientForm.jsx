@@ -20,7 +20,7 @@ export default function NewClientForm({formData, setFormData, handleChangeForm})
     <>
         <TextField
             label="Nombre del cliente"
-            value={formData.tecnico}
+            value={formData.nombre}
             onChange={handleChangeForm("nombre")}
             required
             color='primary'
@@ -32,7 +32,7 @@ export default function NewClientForm({formData, setFormData, handleChangeForm})
         />
         <TextField
             label="Dirección Fiscal"
-            value={formData.tecnico}
+            value={formData.direccion}
             onChange={handleChangeForm("direccion")}
             required
             color='primary'
@@ -44,7 +44,7 @@ export default function NewClientForm({formData, setFormData, handleChangeForm})
         />
         <TextField
             label="NIF"
-            value={formData.tecnico}
+            value={formData.nif}
             onChange={handleChangeForm("nif")}
             required
             color='primary'

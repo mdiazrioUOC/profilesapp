@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect } from "react";
+import {useState, useEffect, useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Stack,
          Backdrop,
@@ -9,13 +9,15 @@ import { Stack,
          Chip
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import UndoOutlinedIcon from '@mui/icons-material/UndoOutlined';
+import SaveIcon from '@mui/icons-material/Save';
 
-
-function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
+function CustomForm({ titulo, saveFunction, formData, setFormData, children, new: isNew = true, originalData }){
     const { setNavLink, setHeader, setGoBack } = useOutletContext();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    
+
+
     const navigate = useNavigate();
 
     const handleChangeForm = (field) => (event, value) => {
@@ -51,7 +53,19 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
             setLoading(false);
         }
     };
-    
+
+    const handleUndoChanges = () => {
+        if (originalData) {
+            setFormData(originalData);
+        }
+    };
+
+    // Verificar si hay cambios comparando formData con originalData
+    const hasChanges = useMemo(() => {
+        if (!originalData) return false;
+        return JSON.stringify(formData) !== JSON.stringify(originalData);
+    }, [formData, originalData]);
+
     // Clonamos los hijos para pasarles la prop saveForm
     const childrenWithProps = React.Children.map(children, (child) => {
         // Solo pasamos props si es un elemento React válido
@@ -63,11 +77,11 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
 
     useEffect(() => {
         setHeader(titulo);
-        setGoBack(true)
+        setGoBack(true);
         return () => {
-          setNavLink(null)
-          setHeader(null)
-          setGoBack(null)
+          setNavLink(null);
+          setHeader(null);
+          setGoBack(null);
         };
       }, []);
 
@@ -86,16 +100,47 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children }){
         
         <Stack gap={2} className="pt-6" alignItems="center">
             {childrenWithProps}
-            <Chip
-                label="Crear"
-                clickable
-                className="bg-primary text-white hover:bg-primary/80"
-                sx={{ 
-                    fontSize: "1rem", // tamaño de letra
-                    padding: "1rem"
-                }} 
-                onClick={handleSaveForm}
-            />
+            {isNew ? (
+                <Chip
+                    label="Crear"
+                    clickable
+                    className="bg-primary text-white hover:bg-primary/80"
+                    sx={{
+                        fontSize: "1rem", // tamaño de letra
+                        padding: "1rem"
+                    }}
+                    onClick={handleSaveForm}
+                />
+            ) : hasChanges ? (
+                <Stack direction="row" gap={2} className="pt-4">
+                    <Chip
+                        label="Deshacer"
+                        icon={<UndoOutlinedIcon />}
+                        clickable
+                        variant="outlined"
+                        color="primary"
+                        sx={{
+                            fontSize: "1rem",
+                            padding: "1rem"
+                        }}
+                        onClick={handleUndoChanges}
+                    />
+                    <Chip
+                        label="Guardar"
+                        clickable
+                        className="bg-primary text-white hover:bg-primary/80"
+                        icon={<SaveIcon sx={{color: '#fff !important'}} />}
+                        sx={{
+                            fontSize: "1rem",
+                            padding: "1rem",
+                            '& .MuiChip-icon': {
+                                color: '#fff !important'
+                            }
+                        }}
+                        onClick={handleSaveForm}
+                    />
+                </Stack>
+            ) : null}
         </Stack>
 
         <Snackbar

@@ -10,6 +10,7 @@ import NewShelf from "./pages/NewShelf";
 import SettingsMenu from "./pages/SettingsMenu";
 import ListadoClientes from "./pages/ListadoClientes";
 import NewClient from "./pages/NewClient";
+import Client from "./pages/Client";
 
 
 const signOut = () => {
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="/new-shelf" element={<NewShelf />} /> 
               <Route path="/settings" element={<SettingsMenu />} /> 
               <Route path="/clients" element={<ListadoClientes/>} /> 
+              <Route path="/cliente/:id" element={<Client/>} /> 
               <Route path="/new-client" element={<NewClient/>} /> 
             </Route>
           </Routes>
