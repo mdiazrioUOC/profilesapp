@@ -281,7 +281,6 @@ function IncidentReport({title, withPosition, formData, changeIncidencias, incid
 
     useEffect(()=>{
         if(!innitialized && formData && !defaultOpen){
-            console.log(formData)
             setIsInnitialized(true)
             setIsManual(incidentData.idPredeterminada==null)
         }

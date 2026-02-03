@@ -31,7 +31,6 @@ function NewShelf () {
             ...sinIncidencias,
             idInspeccion: inspeccion.id
         }
-        console.log(estanteria)
         const {data: estanteriaCreada, errors} = await client.models.Estanteria.create(estanteria)
 
         if (errors) {
@@ -39,7 +38,6 @@ function NewShelf () {
             return;
         }
 
-        console.log(estanteriaCreada)
         // guardar las incidencias
         Object.entries(incidencias).forEach(([tipo, item]) => {
             const {status, ...itemSinStatus} = item;
@@ -51,7 +49,6 @@ function NewShelf () {
                 idInspeccion: inspeccion.id,
                 tipo: tipo.toUpperCase(), 
             }
-            console.log(incidencia)
             client.models.Incidencia.create(incidencia)
         })        
     }

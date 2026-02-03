@@ -66,7 +66,6 @@ export default function UploadMultiplePhotos({ setPhotos, uploadedPhotos = [] })
 
   const handleChange = async (event) => {
     const files = Array.from(event.target.files);
-    console.log(files)
     if (files.length === 0) return;
 
     setUploading(true);

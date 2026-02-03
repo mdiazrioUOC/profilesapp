@@ -90,7 +90,6 @@ export default function NewShelfForm({formData, handleChangeForm, setFormData, d
                 options={tipos}
                 value={formData.tipo || null}
                 onChange={(_, newValue) => {
-                    console.log(newValue)
                     handleChangeForm("tipo")(null, newValue)}}
                 renderInput={(params) => (
                     <TextField {...params} label="Tipo Estantería" />
