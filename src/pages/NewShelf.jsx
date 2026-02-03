@@ -42,8 +42,11 @@ function NewShelf () {
         console.log(estanteriaCreada)
         // guardar las incidencias
         Object.entries(incidencias).forEach(([tipo, item]) => {
+            const {status, ...itemSinStatus} = item;
+            const {idPredeterminada, ...itemSinIDPredeterminada} = itemSinStatus
+            const newItem = idPredeterminada ? itemSinStatus : itemSinIDPredeterminada
             const incidencia = {
-                ...item,
+                ...newItem,
                 idEstanteria: estanteriaCreada.id,
                 idInspeccion: inspeccion.id,
                 tipo: tipo.toUpperCase(), 
@@ -62,7 +65,8 @@ function NewShelf () {
             setFormData = {setFormData}  > 
             <NewShelfForm 
                 formData = {formData}
-                setFormData = {setFormData}/>
+                setFormData = {setFormData}
+                />
         </CustomForm>  
     );
 }

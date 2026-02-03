@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import {
     ListItem,
     Button,
@@ -22,11 +22,12 @@ import UploadPhotoButton from "@/components/UploadPhotoButton";
 
 const emptyIncident = {
         'nivel':"",
-        'predeterminada':"",
+        'idPredeterminada': null,
         'posicion': "",
         'idFotos':[],
         'descripcion': "",
         'medida': "",
+        'status':0
     }
 
 const isEmpty = (incident) => (
@@ -109,12 +110,13 @@ function NoIncidentReport({title, setStatus}){
 }
 
 function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPosition, incidenciasPredeterminadas, isManual, setIsManual}){
-    const expandLess = () => 
+    const expandLess = () => {
         setStatus(
             isIncomplete(incidentData) ? 2 :
             isEmpty(incidentData)      ? 0 :
                                         3
         );
+    }
 
     const levels = [ 
         {color:"success", label:"Verde"},
@@ -122,9 +124,11 @@ function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPo
         {color: "error", label:"Rojo"}]
 
     const handleChange = (field) => (event, value) => {
-        console.log(field, event, value )
+        const setValue = (field === 'nivel' && 
+                         value === incidentData.nivel) ? 
+                         "" : value 
         const newIncidentData = {...incidentData, 
-            [field]: value ?? event?.target?.value ?? "",
+            [field]: setValue ?? event?.target?.value ?? "",
         }
         changeIncidencias({incident:newIncidentData, 
                            filled: !isEmpty(newIncidentData)})
@@ -169,16 +173,19 @@ function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPo
                 <Autocomplete
                     options={incidenciasPredeterminadas}
                     getOptionLabel={(option) => option.descripcion}
-                    value={incidenciasPredeterminadas.find(
-                        inc => inc.descripcion === incidentData.descripcion &&
-                               inc.medida === incidentData.medida
+                    value={incidenciasPredeterminadas.find(inc =>
+                        incidentData.idPredeterminada === inc.id
                     ) || null}
                     onChange={(event, newValue) => {
                         if (newValue) {
-                            handleObjectChange(newValue)
+                            handleObjectChange({
+                                               descripcion:newValue.descripcion,
+                                               medida: newValue.medida
+                            })
                         }
                         else{
-                            handleObjectChange({descripcion:"", medida:""})
+                            handleObjectChange( {descripcion:"",
+                                                 medida:""})
                         }
                     }}
                     renderInput={(params) => (
@@ -240,16 +247,50 @@ function IncidentOpen({title, setStatus, changeIncidencias, incidentData, withPo
     </Card>);
 }
 
-function IncidentReport({title, withPosition, formData, changeIncidencias, incidenciasPredeterminadas}){
-    const [status, setStatus] = useState(0);
+function IncidentReport({title, withPosition, formData, changeIncidencias, incidenciasPredeterminadas, defaultOpen=true}){
     const [isManual, setIsManual] = useState(false);
+    const [innitialized, setIsInnitialized] = useState(false);
 
-    const incidentData = formData ? formData : emptyIncident;
+    const incidentData = formData ?? emptyIncident;
+
+    const updateIncidencia = (field) => (newValue) =>{
+        const newIncidentData = {...incidentData, 
+            [field]: newValue
+        }
+        changeIncidencias({incident:newIncidentData, 
+                           filled: true})
+    }
+
+    useEffect(() => {
+        if (incidenciasPredeterminadas){
+            const existePredeterminada = incidenciasPredeterminadas.find(inc =>
+                            inc.descripcion === incidentData.descripcion &&
+                            inc.medida === incidentData.medida
+                        );
+
+            // Solo actualizar si hay una coincidencia y es diferente a la actual
+            if (existePredeterminada && existePredeterminada.id !== incidentData.idPredeterminada){
+                updateIncidencia("idPredeterminada")(existePredeterminada.id)
+            }
+            // Limpiar idPredeterminada si no hay coincidencia
+            else if (!existePredeterminada && incidentData.idPredeterminada !== null) {
+                updateIncidencia("idPredeterminada")(null)
+            }
+        }
+    }, [incidentData.descripcion, incidentData.medida, incidentData.idPredeterminada, incidenciasPredeterminadas]);
+
+    useEffect(()=>{
+        if(!innitialized && formData && !defaultOpen){
+            console.log(formData)
+            setIsInnitialized(true)
+            setIsManual(incidentData.idPredeterminada==null)
+        }
+    }, [formData?.idPredeterminada]);
 
     const statusMap = {
-        0: <NoIncidentReport title={title} setStatus={setStatus}/>,
+        0: <NoIncidentReport title={title} setStatus={updateIncidencia("status")}/>,
         1: <IncidentOpen title={title} 
-                         setStatus={setStatus} 
+                         setStatus={updateIncidencia("status")} 
                          changeIncidencias={changeIncidencias} 
                          incidentData={incidentData}
                          withPosition={withPosition}
@@ -257,10 +298,10 @@ function IncidentReport({title, withPosition, formData, changeIncidencias, incid
                          isManual = {isManual}
                          setIsManual = {setIsManual}
                          />,
-        2: <IncidentReported title={title} setStatus={setStatus}/>,
-        3: <IncidentIncomplete title={title} setStatus={setStatus}/>
+        2: <IncidentReported title={title} setStatus={updateIncidencia("status")}/>,
+        3: <IncidentIncomplete title={title} setStatus={updateIncidencia("status")}/>
     }; 
-    return statusMap[status];
+    return statusMap[incidentData.status];
 
 }
 

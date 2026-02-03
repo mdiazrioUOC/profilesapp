@@ -52,12 +52,11 @@ function ListadoEstanterias() {
         };
       }, []);
     
-    const selectionSet = ["estanterias.*", "cliente.nombre", "fecha"]
+    const selectionSet = ["estanterias.id", "estanterias.idExterno", "cliente.nombre", "fecha"]
     const fetchEstanterias = async () => {
         try {
             const {data, errors} = await client.models.DimInspeccion.get(
                 {id: inspection.id},{selectionSet});
-            console.log(data)
             setInspectionData(data);
             } catch (err) {
             console.error("Error fetching estanterías:", err);

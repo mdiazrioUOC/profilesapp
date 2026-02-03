@@ -67,7 +67,8 @@ const schema = a.schema({
       inspeccion: a.belongsTo("DimInspeccion", "idInspeccion"),
       nivel: a.enum(["Rojo", "Amarillo", "Verde"]),
       tipo: a.enum(["ESTATICA", "CARGA", "MONTAJE", "DOCUMENTAL"]),
-      predeterminada: a.string(),
+      idPredeterminada: a.id(),
+      tipoPredeterminado: a.belongsTo("IncidenciaPredeterminada", "idPredeterminada"),
       posicion: a.string(),
       idFotos:a.string().array(),
       descripcion: a.string(),
@@ -77,7 +78,9 @@ const schema = a.schema({
   IncidenciaPredeterminada: a.model({
     id: a.id(),
     tipo: a.enum(["ESTATICA", "CARGA", "MONTAJE", "DOCUMENTAL"]),
-    opciones: a.ref('CamposIncidencia').array(),
+    incidencias: a.hasMany("Incidencia", "idPredeterminada"),
+    descripcion: a.string(),
+    medida: a.string()
   }).authorization((allow) => [allow.publicApiKey()]),
 });
 

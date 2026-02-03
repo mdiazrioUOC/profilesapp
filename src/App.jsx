@@ -7,6 +7,7 @@ import BaseLayout from "./pages/BaseLayout"
 import ListadoInspecciones from "./pages/ListadoInspecciones";
 import ListadoEstanterias from "./pages/ListadoEstanterias";
 import NewShelf from "./pages/NewShelf";
+import Shelf from "./pages/Shelf";
 import SettingsMenu from "./pages/SettingsMenu";
 import ListadoClientes from "./pages/ListadoClientes";
 import NewClient from "./pages/NewClient";
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="/new-inspection" element={<NewInspection />} /> 
               <Route path="/inspection/:id" element={<ListadoEstanterias />} /> 
               <Route path="/new-shelf" element={<NewShelf />} /> 
+              <Route path="/estanteria/:id" element={<Shelf />} /> 
               <Route path="/settings" element={<SettingsMenu />} /> 
               <Route path="/clients" element={<ListadoClientes/>} /> 
               <Route path="/cliente/:id" element={<Client/>} /> 

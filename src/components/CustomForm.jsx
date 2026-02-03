@@ -21,7 +21,7 @@ function CustomForm({ titulo, saveFunction, formData, setFormData, children, new
     const navigate = useNavigate();
 
     const handleChangeForm = (field) => (event, value) => {
-        console.log(formData)
+        console.log(formData, event, value, event?.target ? event.target.value : value)
 
         setFormData((prev) => ({
         ...prev,
