@@ -33,4 +33,4 @@ amplifyconfiguration*
 .venv/*
 *.docx
 *.xlsx
-*.png
+notebooks/**/*
