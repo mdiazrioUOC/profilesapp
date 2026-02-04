@@ -12,17 +12,35 @@ import SettingsMenu from "./pages/SettingsMenu";
 import ListadoClientes from "./pages/ListadoClientes";
 import NewClient from "./pages/NewClient";
 import Client from "./pages/Client";
-
+import { I18n } from 'aws-amplify/utils';
+import { translations } from '@aws-amplify/ui-react';
+I18n.putVocabularies(translations);
+I18n.setLanguage('es');
+import { View, Image } from "@aws-amplify/ui-react";
 
 const signOut = () => {
     console.log("/");
 }
 const user = "";
 
+const components = {
+  Header() {
+    return (
+      <View textAlign="center">
+        <Image
+          alt="Amplify logo"
+          src="/src/assets/permar-logo.png"
+          width={300}
+        />
+      </View>
+    );
+  }
+}
+
 export default function App() {
   return (
-    // <Authenticator>
-    //   {({ signOut, user }) => (
+    <Authenticator components={components} className="flex items-center justify-center h-screen pb-20">
+      {({ signOut, user }) => (
         <Router>
           <Routes>
             <Route element={<BaseLayout user={user} signOut={signOut} />}>
@@ -38,7 +56,7 @@ export default function App() {
             </Route>
           </Routes>
         </Router>
-    //   )}
-    // </Authenticator>
+      )}
+    </Authenticator>
   );
 }

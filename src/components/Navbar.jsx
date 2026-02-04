@@ -24,7 +24,7 @@ const Navbar = ({ navLink }) => {
                   : navigate(navLink.pathname, { state: navLink.state });
             }}
             sx={{
-              bgcolor: '#000080',
+              bgcolor: '#050f56',
               '&:hover': { bgcolor: '#000066' }
             }}
           >

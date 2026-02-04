@@ -31,7 +31,7 @@ const schema = a.schema({
       perioricidad: a.integer(),
       inspecciones: a.hasMany("DimInspeccion", "idCliente"),
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .authorization((allow) => [allow.authenticated()]),
 
   DimInspeccion: a.model({
       id: a.id().required(),
@@ -46,7 +46,7 @@ const schema = a.schema({
       estado: a.string(),
       estanterias: a.hasMany("Estanteria", "idInspeccion"),
       incidencias: a.hasMany("Incidencia", "idInspeccion")
-    }).authorization((allow) => [allow.publicApiKey()]),
+    }).authorization((allow) => [allow.authenticated()]),
 
   Estanteria: a.model({
       id: a.id().required(),
@@ -57,7 +57,7 @@ const schema = a.schema({
       nivelCarga: a.integer(),
       modulos: a.ref('Modulo').array(),
       incidencias: a.hasMany("Incidencia", "idEstanteria")
-  }).authorization((allow) => [allow.publicApiKey()]),
+  }).authorization((allow) => [allow.authenticated()]),
 
   Incidencia: a.model({
       id: a.id().required(),
@@ -73,7 +73,7 @@ const schema = a.schema({
       idFotos:a.string().array(),
       descripcion: a.string(),
       medida:a.string()
-  }).authorization((allow) => [allow.publicApiKey()]),
+  }).authorization((allow) => [allow.authenticated()]),
 
   IncidenciaPredeterminada: a.model({
     id: a.id(),
@@ -81,7 +81,7 @@ const schema = a.schema({
     incidencias: a.hasMany("Incidencia", "idPredeterminada"),
     descripcion: a.string(),
     medida: a.string()
-  }).authorization((allow) => [allow.publicApiKey()]),
+  }).authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -89,7 +89,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'apiKey',
+    defaultAuthorizationMode: 'userPool',
   },
 });
 

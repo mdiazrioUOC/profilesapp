@@ -15,9 +15,9 @@ export default function BaseLayout({ user, signOut }) {
       {/* Botón de logout en la esquina superior izquierda */}
       {/* Contenido de la página */}
       <main className= "p-8">
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white pb-10">
           <div className= {goBack? "pt-11": "pt-6"}>
-            <Header title={headerTitle} goBack={goBack} />
+            <Header title={headerTitle} goBack={goBack} signOut={signOut}/>
             <Outlet context={{ setNavLink, setHeader, setGoBack}}/>
           </div>
         </div>

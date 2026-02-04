@@ -23,13 +23,13 @@ const InspectionList = ({ inspections }) => {
       case 'pendiente':
         return <RefreshIcon className="text-red-600 w-8 h-8" />;
       case 'realizada':
-        return <CheckCircleIcon className="text-blue-900 w-8 h-8" />;
+        return <CheckCircleIcon className="text-navy-900 w-8 h-8" />;
       case 'programada':
-        return <EventIcon className="text-blue-900 w-8 h-8" />;
+        return <EventIcon className="text-navy-900 w-8 h-8" />;
       case 'presupuesto':
-        return <EventAvailableIcon className="text-blue-900 w-8 h-8" />;
+        return <EventAvailableIcon className="text-navy-900 w-8 h-8" />;
       case 'finalizada':
-        return <DescriptionIcon className="text-blue-900 w-8 h-8" />;
+        return <DescriptionIcon className="text-navy-900 w-8 h-8" />;
       default:
         return null;
     }
